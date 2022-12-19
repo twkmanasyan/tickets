@@ -1,6 +1,8 @@
 import TicketItem from "../TicketItem/TicketItem";
-
+ 
 const TicketList = ({tickets}) => {
+
+    
     return (
         <> 
             <table className="table table-striped table-hover">

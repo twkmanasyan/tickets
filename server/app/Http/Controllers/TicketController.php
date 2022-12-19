@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -95,15 +96,22 @@ class TicketController extends Controller
         }
     }
 
-    public function share() {
+    public function users_for_share($id) {
+        return response()->json([
+            'status' => 200,
+            'users' => User::where("id", "<>", $id)->get()
+        ]);
+    }
 
+    public function share(Request $request) {
+        return $request->only(['ides']);
     }
 
     public function my_shared($id) {
         $tickets = DB::table("shared_tickets")
             ->join("users", "shared_tickets.shared_to_id", "=", "users.id")
             ->join("tickets", "shared_tickets.ticket_id", "=", "tickets.id")
-            ->where("shared_to_id", "=", $id)
+            ->where("shared_from_id", "=", $id)
             ->select([
                 'users.name AS username',
                 'tickets.title AS ticketTitle',

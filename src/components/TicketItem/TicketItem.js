@@ -1,4 +1,5 @@
 import TicketEditModalForm from "../UI/TicketEditModalForm/TicketCreateModalForm";
+import TicketShareModalForm from "../UI/TicketShareModalForm/TicketShareModalForm";
 
 const TicketItem = ({id, index, title, body}) => {
     return(
@@ -9,7 +10,7 @@ const TicketItem = ({id, index, title, body}) => {
             <td>
                 <TicketEditModalForm id={id} title={title} body={body} />
                 <button className="btn btn-danger">Delete</button>
-                <button className="btn btn-secondary">Share</button>
+                <TicketShareModalForm id={id} ticket={{id, title, body}} />
             </td>
         </tr>
     );

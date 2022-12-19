@@ -11,7 +11,7 @@ const Tickets = () => {
     const navigate = useNavigate();
     
     const token = localStorage.getItem("token");
-
+    
     
     
     useEffect(()=> {
@@ -29,7 +29,7 @@ const Tickets = () => {
             <TicketCreateModalForm />
             {
                 tickets.length > 0
-                ? <TicketList tickets={tickets} />
+                ? <TicketList  tickets={tickets} />
                 : <p>Emty List</p>
             }
 
