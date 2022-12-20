@@ -7,10 +7,11 @@ import * as yup from "yup";
 import axios from 'axios';
 
 
-const TicketShareModalForm = memo(() => { 
+const TicketShareModalForm = memo(({ticket}) => { 
     const [show, setShow] = useState(false); 
     const handleClose = () => setShow(false);
     const [users, setUsers] = useState([]); 
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const handleShow = () => {
         setShow(true);
         axios.get(`/api/usersForShare/${user_id}`,  {
@@ -30,11 +31,29 @@ const TicketShareModalForm = memo(() => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
+            ticket_id:ticket.id,
             user_id,
-            ides:formData.current[0].value
+            ides:selectedUsers
         }
+ 
 
-        console.log(data);
+        axios.post("/api/share", data, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+            xsrfHeaderName: "X-XSRF-TOKEN", 
+            withCredentials: true
+        }).then( resp => {
+            console.log(resp);
+            setSelectedUsers([]);
+        });
+    }
+
+    const handleSelectItem = (e) => {
+        setSelectedUsers([
+            ...selectedUsers,
+            +e.target.value
+        ]);
     }
 
     return (
@@ -49,7 +68,7 @@ const TicketShareModalForm = memo(() => {
                 <Modal.Body>  
                     <form ref={formData} className='form' onSubmit={handleSubmit}>
                         <Form.Select aria-label="Default select example"  multiple > 
-                            {users.map( (user, index) => <option key={index} value={user.id}>{user.name}</option> )}
+                            {users.map( (user, index) => <option key={index} value={user.id} onClick={handleSelectItem}>{user.name}</option> )}
                         </Form.Select>
 
                         <Button type='submit' variant='primary'>Share</Button>

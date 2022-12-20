@@ -104,14 +104,24 @@ class TicketController extends Controller
     }
 
     public function share(Request $request) {
-        return $request->only(['ides']);
+        $users_ides = $request->ides;
+        $from_user_id = $request->user_id;
+        $ticket_id = $request->ticket_id;
+        for($i = 0; $i < count($users_ides); $i++) {
+            DB::table("shared_tickets")->insert([
+                "shared_from_id" => $from_user_id,
+                "shared_to_id" => $users_ides[$i],
+                "ticket_id" => $ticket_id,
+                "created_at" => now()
+            ]);
+        }
     }
 
     public function my_shared($id) {
         $tickets = DB::table("shared_tickets")
             ->join("users", "shared_tickets.shared_to_id", "=", "users.id")
             ->join("tickets", "shared_tickets.ticket_id", "=", "tickets.id")
-            ->where("shared_from_id", "=", $id)
+            ->where("shared_to_id", "=", $id)
             ->select([
                 'users.name AS username',
                 'tickets.title AS ticketTitle',
