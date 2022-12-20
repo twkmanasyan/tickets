@@ -19,6 +19,8 @@ const Login = () => {
         }).then(resp => {
             if(resp.data.validation_errors) { 
                 setErrors(resp.data.validation_errors);
+            } else if(resp.data.status == 401) {
+                alert(resp.data.message)
             } else {
                 const token = resp.data.token;
                 const user = resp.data.user; 

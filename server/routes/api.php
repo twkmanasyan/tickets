@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get("/logout", [UserController::class, "logout"]);
     Route::get("/tickets", [TicketController::class, "index"]);
     Route::get("/usersForShare/{id}", [TicketController::class, "users_for_share"]);
+    Route::post("/tickets/update", [TicketController::class, "update"]);
     Route::post("/share", [TicketController::class, "share"]);
     Route::post("/tickets/store", [TicketController::class, "store"]);
 

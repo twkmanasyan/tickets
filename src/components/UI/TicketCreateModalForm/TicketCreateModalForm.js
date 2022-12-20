@@ -17,8 +17,8 @@ const TicketCreateModalForm = () => {
     
 
     const validationSchema = yup.object().shape({
-        title: yup.string().typeError("Պետք է լինի տող").required("Պարտադիր դաշտ է"),
-        body: yup.string().required("Պարտադիր դաշտ է"),
+        title: yup.string().typeError("Please enter only alpha characters.").required("The name is required."),
+        body: yup.string().required("The body is required."),
     });
 
     return (

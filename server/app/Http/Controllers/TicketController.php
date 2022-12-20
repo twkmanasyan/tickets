@@ -65,7 +65,7 @@ class TicketController extends Controller
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request) {  
         $ticket = Ticket::find($request['id']);
         $update = $ticket->update($request->only(['title', 'body']));
         if($update) {
@@ -115,6 +115,11 @@ class TicketController extends Controller
                 "created_at" => now()
             ]);
         }
+
+        return response()->json([
+            'status' => 200,
+            'message' => ' Ticket successfully shared'
+        ]);
     }
 
     public function my_shared($id) {

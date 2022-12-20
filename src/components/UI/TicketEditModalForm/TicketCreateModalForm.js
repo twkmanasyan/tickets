@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'; 
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -10,11 +11,11 @@ const TicketEditModalForm = ({ id, title, body}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
+    const token = localStorage.getItem("token");
 
     const validationSchema = yup.object().shape({
-        title: yup.string().typeError("Պետք է լինի տող").required("Պարտադիր դաշտ է"),
-        body: yup.string().required("Պարտադիր դաշտ է"),
+        title: yup.string().typeError("Please enter only alpha characters.").required("The name is required."),
+        body: yup.string().required("The body is required."),
     });
 
     return (
@@ -36,7 +37,18 @@ const TicketEditModalForm = ({ id, title, body}) => {
                         validationSchema={validationSchema}
 
                         onSubmit={ (values, resetForm) => {
-                            console.log(values);
+                            values.id = id;
+                            axios.post(`/api/tickets/update`, values, {
+                                headers:{
+                                    Authorization: `Bearer ${token}`
+                                },
+                                xsrfHeaderName: "X-XSRF-TOKEN", 
+                                withCredentials: true
+                            }).then( resp => {
+                                console.log(resp);
+                                setShow(false)
+                                
+                            })
                             resetForm();
                         }}
 

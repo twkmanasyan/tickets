@@ -58,13 +58,21 @@ class UserController extends Controller
 //                    'email' => 'Incorrect email or password'
 //                ]);
             } else {
-                $token = $user->createToken($user->email . '_Token')->plainTextToken;
-                return response()->json([
-                    'status' => 200,
-                    'user' => $user,
-                    'token' => $token,
-                    'message' => 'Welcome'
-                ]);
+                if($user->is_verified == 1) {
+                    $token = $user->createToken($user->email . '_Token')->plainTextToken;
+                    return response()->json([
+                        'status' => 200,
+                        'user' => $user,
+                        'token' => $token,
+                        'message' => 'Welcome'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'Account not verified, check your email please'
+                    ]);
+                }
+
             }
         } else {
             return response()->json([
